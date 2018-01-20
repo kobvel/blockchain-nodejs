@@ -9,6 +9,7 @@
     "extends": ["eslint:recommended", "plugin:node/recommended"],
     "rules": {
         "node/no-unsupported-features": 0,
+        "node/no-unpublished-require": 0,
         "no-console": "off",
         "node/exports-style": ["error", "module.exports"]
     }

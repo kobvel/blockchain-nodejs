@@ -3,7 +3,7 @@ const crypto = require('crypto-js');
 class Block {
     /**
      * @param  {number} index
-     * @param  {Date} timestamp
+     * @param  {number} timestamp
      * @param  {string} data
      * @param  {string} prevHash
      */
