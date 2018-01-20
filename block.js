@@ -1,16 +1,22 @@
 const crypto = require('crypto-js');
 
 class Block {
-    constructor(index, timestamp, data, previousHash) {
+    /**
+     * @param  {number} index
+     * @param  {Date} timestamp
+     * @param  {string} data
+     * @param  {string} prevHash
+     */
+    constructor(index, timestamp, data, prevHash) {
         this.index = index;
         this.timestamp = timestamp;
         this.data = data;
-        this.previousHash = previousHash;
+        this.prevHash = prevHash;
         this.hash = this.hashBlock();
     }
 
     hashBlock() {
-        const strToHash = this.index + this.timestamp + this.data + this.previousHash;
+        const strToHash = this.index + this.timestamp + this.data + this.prevHash;
 
         return crypto.SHA256(strToHash).toString();
     }

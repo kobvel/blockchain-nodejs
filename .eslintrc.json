@@ -8,7 +8,8 @@
     "plugins": ["node"],
     "extends": ["eslint:recommended", "plugin:node/recommended"],
     "rules": {
-        "node/no-unsupported-features": [false],
+        "node/no-unsupported-features": 0,
+        "no-console": "off",
         "node/exports-style": ["error", "module.exports"]
     }
 }
