@@ -1,0 +1,32 @@
+{
+  "name": "blockchain-nodejs",
+  "version": "1.0.0",
+  "node": ">=4.0.0",
+  "description": "Simple blockchain implementation with the Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_packages/.bin/jasmine-node spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kobvel/blockchain-nodejs.git"
+  },
+  "keywords": [
+    "nodejs",
+    "blockchain"
+  ],
+  "author": "kobvel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kobvel/blockchain-nodejs/issues"
+  },
+  "homepage": "https://github.com/kobvel/blockchain-nodejs#readme",
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-plugin-node": "^5.2.1",
+    "jasmine-node": "^1.14.5"
+  },
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
