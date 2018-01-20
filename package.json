@@ -5,6 +5,7 @@
   "description": "Simple blockchain implementation with the Node.js",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "istanbul cover --include-all-sources jasmine-node test",
     "jasmine": "./node_modules/jasmine-node/bin/jasmine-node"
   },

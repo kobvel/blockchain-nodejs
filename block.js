@@ -4,7 +4,7 @@ class Block {
     /**
      * @param  {number} index
      * @param  {number} timestamp
-     * @param  {string} data
+     * @param  {Object} data
      * @param  {string} prevHash
      */
     constructor(index, timestamp, data, prevHash) {

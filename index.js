@@ -1,20 +1,8 @@
-const blockchain = require('./blockchain');
+const BlockChain = require('./blockchain');
 const initServer = require('./server');
-const chain = [blockchain.createGenesisBlock()];
-const numberOfBlocks = 20;
 
-let prevBlock = chain[0];
-let i = 0;
 
-while (i < numberOfBlocks) {
-    const newBlock = blockchain.nextBlock(prevBlock);
-    chain.push(newBlock);
-    prevBlock = newBlock;
-    console.log(`Block ${newBlock.index} has been added to the blockchain!`)
-    console.log(`Hash: ${newBlock.hash}\n`);
-    i++;
-}
+const blockchain = new BlockChain();
 
-console.log(chain);
 
-initServer(chain);
+initServer(blockchain);
