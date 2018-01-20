@@ -1,5 +1,5 @@
 const blockchain = require('./blockchain');
-
+const initServer = require('./server');
 const chain = [blockchain.createGenesisBlock()];
 const numberOfBlocks = 20;
 
@@ -16,3 +16,5 @@ while (i < numberOfBlocks) {
 }
 
 console.log(chain);
+
+initServer(chain);
