@@ -3,37 +3,42 @@ services:
   node1:
     container_name: node1
     environment:
-      - PEERS=3002;3003
-      - HOST=$DOCKERHOST
+      - PEERS=http://node2:3002;http://node3:3003
       - HTTP_PORT=3001
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-    - "3001:3001"
+        - "3001:3001"
+    networks:
+      default:
+        aliases:
+          - node1
   node2:
     container_name: node2
     environment:
-      - PEERS=3001;3003
-      - HOST=$DOCKERHOST
+      - PEERS=http://node1:3001;http://node3:3003
       - HTTP_PORT=3002
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
     - "3002:3002"
-    links:
-      - node1:node1
+    networks:
+      default:
+        aliases:
+          - node2
   node3:
     container_name: node3
     environment:
-      - PEERS=3001;3002
-      - HOST=$DOCKERHOST
+      - PEERS=http://node1:3001;http://node2:3002
       - HTTP_PORT=3003
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-    - "3003:3003"
-    links:
-      - node2:node2
+        - "3003:3003"
+    networks:
+      default:
+        aliases:
+          - node3
