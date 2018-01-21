@@ -1,13 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const Blockchain = require('./blockchain');
-const Block = require('./block');
-const PEERS = process.env.PEERS ? process.env.PEERS.split(';') : [];
-
-
 const http_port = process.env.HTTP_PORT || 8080;
-const minerAddress = "q3nf394hjg-random-miner-address-34nf3i4nflkn3oi";
 
 /**
  * @param  {Blockchain} blockchain
