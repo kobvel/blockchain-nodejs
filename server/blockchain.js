@@ -1,5 +1,7 @@
 const Block = require('./block');
 const axios = require('axios');
+const Transaction = require('./transaction');
+const PEERS = process.env.PEERS ? process.env.PEERS.split(';') : [];
 
 class BlockChain {
 
@@ -42,44 +44,80 @@ class BlockChain {
         this.chain.push(block);
     }
 
-    consensus(host, peers) {
+    async mineBlock() {
+        await this.consensus();
+
+        const lastBlock = this.chain[this.chain.length - 1];
+        const lastProof = lastBlock.data['pow'];
+
+        let nodeTransactions = [];
+        /*
+            Find the proof of work for
+            the current block being mined
+            Note: The program will hang here until a new
+            proof of work is found
+        */
+        const proof = this.proofOfWork(lastProof)
+        /*
+            Once we find a valid proof of work,
+            we know we can mine a block so
+            we reward the miner by adding a transaction
+        */
+        nodeTransactions.push(new Transaction('network', 'minerAddress', 1));
+
+        // Now we can gather data to create new block
+        const newBlockData = {
+            pow: proof,
+            transactions: nodeTransactions
+        };
+        const newBlockIndex = lastBlock.index + 1;
+        const newBlockTimestamp = Date.now();
+        const lastBlockHash = lastBlock.hash;
+
+        // Empty transaction list
+        nodeTransactions = [];
+
+        const minedBlock = new Block(newBlockIndex, newBlockTimestamp, newBlockData, lastBlockHash);
+
+        this.chain.push(minedBlock);
+
+        return minedBlock;
+    }
+
+    async consensus() {
         // Get the blocks from other nodes
-        const otherChains = this.findNewChains(host, peers);
-        console.log(`Found other ${otherChains} chains`);
+        const otherChains = await this.findNewChains();
+        console.log(`Found other ${otherChains.length} chains`);
         // If our chain isn't longest, then we store the longest chain
         let longest_chain = this.chain;
 
         for (let chain of otherChains) {
             if (longest_chain.length < chain.length) {
                 console.log('Replacing with the other node');
-                longest_chain = chain;
+                this.chain = chain.slice();
             }
         }
-
-        // longest_chain = chain;
-        // If the longest chain isn't ours, then we stop mining and set
-        // our chain to the longest one
-        this.chain = longest_chain;
     }
 
-    findNewChains(host, peers) {
+    async findNewChains() {
         // Get the blockchains of every other node
         const otherChains = [];
         console.log('Searching peer nodes...');
 
-        for (let peer of peers) {
+        for (let peer of PEERS) {
             const getBlocks = async peer => {
                 try {
-                    const response = await axios.get(`http://${host}:${peer}/blocks`);
+                    const response = await axios.get(`${peer}/blocks`);
+                    console.log(JSON.stringify(otherChains));
                     otherChains.push(response.data);
                 } catch (error) {
-                    console.log(`Unable to get blocks from the network ${host}:${peer} \n`, error);
+                    console.log(`Unable to get blocks from the network ${peer} \n`, error);
                 }
             };
-            getBlocks(peer);
+            await getBlocks(peer);
         }
 
-        return otherChains;
+        return otherChains.slice();
     }
 
 }

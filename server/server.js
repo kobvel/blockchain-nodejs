@@ -1,29 +1,26 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const Transaction = require('./transaction');
 const Blockchain = require('./blockchain');
 const Block = require('./block');
 const PEERS = process.env.PEERS ? process.env.PEERS.split(';') : [];
-const HOST = process.env.HOST || 'localhost';
 
 
 const http_port = process.env.HTTP_PORT || 8080;
 const minerAddress = "q3nf394hjg-random-miner-address-34nf3i4nflkn3oi";
 
-console.log(HOST)
 /**
  * @param  {Blockchain} blockchain
  */
 function initServer(blockchain) {
-    const chain = blockchain.chain;
     const app = express();
     app.use(bodyParser.json());
 
     let nodeTransactions = [];
 
     app.use(express.static(path.join(__dirname, '../client')));
-    app.get('/blocks', (req, res) => res.send(JSON.stringify(chain)));
+    app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain.chain)));
+
     app.post('/txion', (req, res) => {
         const transaction = req.body;
         nodeTransactions.push(transaction);
@@ -38,38 +35,8 @@ function initServer(blockchain) {
         res.send("Transaction submission successful\n");
     });
 
-    app.get('/mine', (req, res) => {
-        blockchain.consensus(HOST, PEERS);
-        const lastBlock = chain[chain.length - 1];
-        const lastProof = lastBlock.data['pow'];
-        /*
-            Find the proof of work for
-            the current block being mined
-            Note: The program will hang here until a new
-            proof of work is found
-        */
-        const proof = blockchain.proofOfWork(lastProof)
-        /*
-            Once we find a valid proof of work,
-            we know we can mine a block so
-            we reward the miner by adding a transaction
-        */
-        nodeTransactions.push(new Transaction('network', 'minerAddress', 1));
-
-        // Now we can gather data to create new block
-        const newBlockData = {
-            pow: proof,
-            transactions: nodeTransactions
-        };
-        const newBlockIndex = lastBlock.index + 1;
-        const newBlockTimestamp = Date.now();
-        const lastBlockHash = lastBlock.hash;
-
-        // Empty transaction list
-        nodeTransactions = [];
-
-        const minedBlock = new Block(newBlockIndex, newBlockTimestamp, newBlockData, lastBlockHash);
-        chain.push(minedBlock);
+    app.get('/mine', async(req, res) => {
+        const minedBlock = await blockchain.mineBlock();
 
         res.send(JSON.stringify(minedBlock));
     });
