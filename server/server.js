@@ -22,6 +22,7 @@ function initServer(blockchain) {
 
     let nodeTransactions = [];
 
+    app.use(express.static(path.join(__dirname, '../client')));
     app.get('/blocks', (req, res) => res.send(JSON.stringify(chain)));
     app.post('/txion', (req, res) => {
         const transaction = req.body;
