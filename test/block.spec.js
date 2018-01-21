@@ -1,4 +1,4 @@
-const Block = require('../block');
+const Block = require('../server/block');
 const _ = require('underscore');
 const validator = require('validator');
 

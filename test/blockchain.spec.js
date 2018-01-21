@@ -1,4 +1,4 @@
-const Blockchain = require('../blockchain');
+const Blockchain = require('../server/blockchain');
 const validator = require('validator');
 
 

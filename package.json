@@ -27,6 +27,7 @@
     "@types/jasmine-node": "^1.14.32",
     "eslint": "^4.16.0",
     "eslint-plugin-node": "^5.2.1",
+    "istanbul": "^1.1.0-alpha.1",
     "jasmine-node": "^1.14.5",
     "validator": "^9.2.0"
   },
@@ -35,7 +36,6 @@
     "body-parser": "^1.18.2",
     "crypto-js": "^3.1.9-1",
     "express": "^4.16.2",
-    "istanbul": "^0.4.5",
     "underscore": "^1.8.3"
   }
 }
