@@ -1,12 +1,17 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const Transaction = require('./transaction');
 const Blockchain = require('./blockchain');
 const Block = require('./block');
+const PEERS = process.env.PEERS ? process.env.PEERS.split(';') : [];
+const HOST = process.env.HOST || 'localhost';
 
-const httpPort = '8080';
+
+const http_port = process.env.HTTP_PORT || 8080;
 const minerAddress = "q3nf394hjg-random-miner-address-34nf3i4nflkn3oi";
 
+console.log(HOST)
 /**
  * @param  {Blockchain} blockchain
  */
@@ -33,6 +38,7 @@ function initServer(blockchain) {
     });
 
     app.get('/mine', (req, res) => {
+        blockchain.consensus(HOST, PEERS);
         const lastBlock = chain[chain.length - 1];
         const lastProof = lastBlock.data['pow'];
         /*
@@ -67,7 +73,8 @@ function initServer(blockchain) {
         res.send(JSON.stringify(minedBlock));
     });
 
-    app.listen(httpPort, () => console.log('Listening http on port: ' + httpPort));
+    app.listen(http_port, () => console.log('Listening http on port: ' + http_port));
+
 }
 
 module.exports = initServer;
