@@ -5,16 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <title>Micro Blockchain</title>
 </head>
 
 <body>
-    <h2>Hello Micro blockchain</h2>
+    <div class="container">
+        <h2>Operations List updates in
+            <span id="counter"></span> seconds</h2>
+
+        <table class="table table-bordered" id="root-table">
+            <thead>
+                <tr>
+                    <th>index</th>
+                    <th>Hash</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+            </tbody>
+        </table>
+    </div>
 </body>
+<script src="./axios.min.js"></script>
+<script src="./handlebars-v4.0.11.js"></script>
 <script>
-    setTimeout(() => {
+    const table = document.getElementById('table-body');
+    let lastBlocks = [];
+    // Set the date we're counting down to
+    let countDownDate = Math.floor(new Date() / 1000);
+    updateBlocks();
+
+    setInterval(() => {
+        let now = Math.floor(new Date() / 1000);
+        let distance = now - countDownDate;
+
+        document.getElementById('counter').innerHTML = 5 - distance;
+
+        if (5 - distance <= 0) {
+            updateBlocks();
+        }
 
     }, 1000);
+
+    function updateBlocks() {
+        axios.get('/blocks').then((res) => {
+            countDownDate = Math.floor(new Date() / 1000);
+            const blocks = res.data;
+
+            if (JSON.stringify(lastBlocks) !== JSON.stringify(blocks)) {
+                while (table.firstChild) table.removeChild(table.firstChild);
+                for (let block of blocks) {
+                    addRow(table, block);
+                }
+                lastBlocks = blocks;
+            }
+        });
+    }
+
+    function addRow(tableRef, block) {
+        const newRow = table.insertRow(0);
+
+        const indexCell = newRow.insertCell(0);
+        const hashCell = newRow.insertCell(1);
+        const dateCell = newRow.insertCell(2);
+
+        const indexText = document.createTextNode(block.index);
+        const hashText = document.createTextNode(block.hash);
+        const dateText = document.createTextNode(new Date(block.timestamp).toUTCString());
+
+        indexCell.appendChild(indexText);
+        hashCell.appendChild(hashText);
+        dateCell.appendChild(dateText);
+    }
+
 </script>
 
 </html>
