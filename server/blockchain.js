@@ -87,14 +87,14 @@ class BlockChain {
     async consensus() {
         // Get the blocks from other nodes
         const otherChains = await this.findNewChains();
-        console.log(`Found other ${otherChains.length} chains`);
+        console.log(`Found other ${Object.keys(otherChains).length} chains`);
         // If our chain isn't longest, then we store the longest chain
         let longest_chain = this.chain;
 
-        for (let chain of otherChains) {
-            if (longest_chain.length < chain.length) {
-                console.log('Replacing with the other node');
-                this.chain = chain.slice();
+        for (let peer in otherChains) {
+            if (longest_chain.length < otherChains[peer].length) {
+                console.log(`Replacing with the other node: ${peer}`);
+                this.chain = otherChains[peer];
             }
         }
     }
@@ -102,14 +102,12 @@ class BlockChain {
     async findNewChains() {
         // Get the blockchains of every other node
         const otherChains = [];
-        console.log('Searching peer nodes...');
 
         for (let peer of PEERS) {
             const getBlocks = async peer => {
                 try {
                     const response = await axios.get(`${peer}/blocks`);
-                    console.log(JSON.stringify(otherChains));
-                    otherChains.push(response.data);
+                    otherChains[peer] = response.data;
                 } catch (error) {
                     console.log(`Unable to get blocks from the network ${peer} \n`, error);
                 }
@@ -117,7 +115,7 @@ class BlockChain {
             await getBlocks(peer);
         }
 
-        return otherChains.slice();
+        return otherChains;
     }
 
 }
