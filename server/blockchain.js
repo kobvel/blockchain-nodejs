@@ -43,8 +43,10 @@ class BlockChain {
     addBlock(block) {
         this.chain.push(block);
     }
-
-    async mineBlock() {
+    /**
+     * @param  {string} address hash address of miner
+     */
+    async mineBlock(address) {
         await this.consensus();
 
         const lastBlock = this.chain[this.chain.length - 1];
@@ -63,7 +65,7 @@ class BlockChain {
             we know we can mine a block so
             we reward the miner by adding a transaction
         */
-        nodeTransactions.push(new Transaction('network', 'minerAddress', 1));
+        nodeTransactions.push(new Transaction('network', address, 1));
 
         // Now we can gather data to create new block
         const newBlockData = {
