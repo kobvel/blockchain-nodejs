@@ -52,7 +52,7 @@ class BlockChain {
         const lastBlock = this.chain[this.chain.length - 1];
         const lastProof = lastBlock.data['pow'];
 
-        let nodeTransactions = [];
+        let nodeTransactions = [...lastBlock.data.transactions];
         /*
             Find the proof of work for
             the current block being mined
@@ -84,6 +84,29 @@ class BlockChain {
         this.chain.push(minedBlock);
 
         return minedBlock;
+    }
+
+    /**
+     * @param  {string} address hash address of requester
+     */
+    async getBalance(address) {
+        await this.consensus();
+
+        const lastBlock = this.chain[this.chain.length - 1];
+        const transactions = lastBlock.data.transactions;
+        let balance = 0;
+
+        for (let i in transactions) {
+            const tx = transactions[i];
+
+            if (tx.from === address) {
+                balance = balance - tx.amount;
+            } else if (tx.to === address) {
+                balance = balance + tx.amount;
+            }
+        }
+
+        return balance;
     }
 
     async consensus() {

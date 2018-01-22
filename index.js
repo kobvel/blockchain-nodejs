@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const http_port = process.env.HTTP_PORT || 8080;
+const validator = require('validator');
 
 const BlockChain = require('./server/blockchain');
 
@@ -32,11 +33,24 @@ app.post('/txion', (req, res) => {
 
 app.post('/mine', async(req, res) => {
     if (!req.body.wallet) {
-        res.status(500).send('No wallet address!');
+        res.sendStatus(400);
     }
     const minedBlock = await blockchain.mineBlock(req.body.wallet);
 
     res.send(JSON.stringify(minedBlock));
+});
+
+app.get('/balance/:address', async(req, res) => {
+    const senderAddress = req.params.address;
+
+    if (!validator.isHash(senderAddress, 'sha256')) {
+        console.log(senderAddress)
+        res.sendStatus(400);
+    }
+
+    const balance = await blockchain.getBalance(senderAddress);
+
+    res.send(JSON.stringify(balance));
 });
 
 app.listen(http_port, () => console.log('Listening http on port: ' + http_port));
