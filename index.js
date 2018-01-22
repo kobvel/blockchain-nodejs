@@ -53,4 +53,18 @@ app.get('/balance/:address', async(req, res) => {
     res.send(JSON.stringify(balance));
 });
 
+app.post('/transfer', async(req, res) => {
+
+    if (!validator.isHash(req.body.from, 'sha256') && !validator.isHash(req.body.to, 'sha256')) {
+        res.sendStatus(400);
+    }
+    if (req.body.to === req.body.from) {
+        res.status(400).send('Sender and Address can\'t have the same hash!');
+    }
+
+    const transaction = await blockchain.sendCoins(req.body);
+
+    res.send(JSON.stringify(transaction));
+});
+
 app.listen(http_port, () => console.log('Listening http on port: ' + http_port));

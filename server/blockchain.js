@@ -3,6 +3,9 @@ const axios = require('axios');
 const Transaction = require('./transaction');
 const PEERS = process.env.PEERS ? process.env.PEERS.split(';') : [];
 
+// The address of a person who is running the server
+const DEFAULT_MINER = 'd6656d585dfea0b12c9a3a332d0d50bd8b4d7fb5adcd6f82d92bab7158dc3dd3';
+
 class BlockChain {
 
     constructor() {
@@ -43,16 +46,21 @@ class BlockChain {
     addBlock(block) {
         this.chain.push(block);
     }
+
     /**
-     * @param  {string} address hash address of miner
+     * @param  {string} address hash address of miner who is proving the work
+     * @param  {Transaction} tx new transaction which somebody wants to submit
      */
-    async mineBlock(address) {
+    async mineBlock(address = DEFAULT_MINER, tx) {
         await this.consensus();
 
         const lastBlock = this.chain[this.chain.length - 1];
         const lastProof = lastBlock.data['pow'];
 
         let nodeTransactions = [...lastBlock.data.transactions];
+        if (tx instanceof Transaction) {
+            nodeTransactions.push(tx);
+        }
         /*
             Find the proof of work for
             the current block being mined
@@ -107,6 +115,14 @@ class BlockChain {
         }
 
         return balance;
+    }
+
+    async sendCoins(reqBody) {
+        const transferTransaction = new Transaction(reqBody.from, reqBody.to, reqBody.amount);
+
+        await this.mineBlock(DEFAULT_MINER, transferTransaction);
+
+        return transferTransaction;
     }
 
     async consensus() {
