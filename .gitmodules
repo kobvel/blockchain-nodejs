@@ -1,0 +1,3 @@
+[submodule "blockchain-nodejs-wallet"]
+	path = blockchain-nodejs-wallet
+	url = https://github.com/kobvel/blockchain-nodejs-wallet
