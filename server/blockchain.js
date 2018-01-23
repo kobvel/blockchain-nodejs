@@ -125,6 +125,14 @@ class BlockChain {
         return transferTransaction;
     }
 
+    async getTransactions() {
+        await this.consensus();
+
+        const lastBlock = this.chain[this.chain.length - 1];
+
+        return lastBlock.data.transactions;
+    }
+
     async consensus() {
         // Get the blocks from other nodes
         const otherChains = await this.findNewChains();

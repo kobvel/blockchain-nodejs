@@ -15,7 +15,14 @@ app.use(bodyParser.json());
 let nodeTransactions = [];
 
 app.use(express.static(path.join(__dirname, '../client')));
+
 app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain.chain)));
+
+app.get('/transactions', async (req, res) => {
+    const txs = await blockchain.getTransactions();
+
+    res.send(JSON.stringify(txs));
+});
 
 app.post('/txion', (req, res) => {
     const transaction = req.body;
