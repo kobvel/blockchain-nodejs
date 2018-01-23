@@ -12,30 +12,21 @@ const blockchain = new BlockChain();
 const app = express();
 app.use(bodyParser.json());
 
-let nodeTransactions = [];
+app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.use(express.static(path.join(__dirname, '../client')));
 
 app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain.chain)));
 
-app.get('/transactions', async (req, res) => {
+app.get('/transactions', async(req, res) => {
     const txs = await blockchain.getTransactions();
 
     res.send(JSON.stringify(txs));
-});
-
-app.post('/txion', (req, res) => {
-    const transaction = req.body;
-    nodeTransactions.push(transaction);
-
-    console.log(`
-    New transaction
-    FROM: ${transaction.from}
-    TO: ${transaction.to}
-    AMOUNT: ${transaction.amount}
-    `);
-
-    res.send("Transaction submission successful\n");
 });
 
 app.post('/mine', async(req, res) => {
