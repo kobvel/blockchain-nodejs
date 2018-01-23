@@ -42,3 +42,14 @@ services:
       default:
         aliases:
           - node3
+  wallet:
+    container_name: wallet
+    environment:
+      - PEERS=http://node1:3001;http://node2:3002;http://node3:3003
+    build:
+      context: ./blockchain-nodejs-wallet/
+      dockerfile: Dockerfile
+    ports:
+        - "80:80"
+    networks:
+      default:
