@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const http_port = process.env.HTTP_PORT || 8080;
+const walletConnectedVersion = process.env.WALLET_CONNECTED || false;
 const validator = require('validator');
 
 const BlockChain = require('./server/blockchain');
@@ -19,7 +20,16 @@ app.all('*', (req, res, next) => {
     next();
 });
 
-app.use(express.static(path.join(__dirname, '../client')));
+if (walletConnectedVersion) {
+    app.use(express.static(path.join(__dirname, './wallet/dist')));
+} else {
+    app.use(express.static(path.join(__dirname, '../client')));
+}
+
+app.get('/hosts', (req, res) => {
+    res.send(['']);
+});
+
 
 app.get('/blocks', (req, res) => res.send(JSON.stringify(blockchain.chain)));
 
@@ -64,5 +74,6 @@ app.post('/transfer', async(req, res) => {
 
     res.send(JSON.stringify(transaction));
 });
+
 
 app.listen(http_port, () => console.log('Listening http on port: ' + http_port));

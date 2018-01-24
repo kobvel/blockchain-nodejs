@@ -7,7 +7,7 @@ services:
       - HTTP_PORT=3001
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dec
     ports:
         - "3001:3001"
     networks:
@@ -21,7 +21,7 @@ services:
       - HTTP_PORT=3002
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dec
     ports:
     - "3002:3002"
     networks:
@@ -35,7 +35,7 @@ services:
       - HTTP_PORT=3003
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dec
     ports:
         - "3003:3003"
     networks:
