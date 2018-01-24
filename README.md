@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/kobvel/blockchain-nodejs/badge.svg?branch=master)](https://coveralls.io/r/kobvel/blockchain-nodejs?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/kobvel/blockchain-nodejs/badge.svg?branch=master)](https://coveralls.io/github/kobvel/blockchain-nodejs?branch=master)
 # Decentralized blockchain network
 
 [Blockchain](https://en.wikipedia.org/wiki/Blockchain) is a core concept behine all modern decentralized cryptocurrencies. In this repo you can check manually how does it work on the basic level.
