@@ -46,6 +46,7 @@ services:
     container_name: wallet
     environment:
       - PORTS=3001;3002;3003
+      - HTTP_PORT=4200
       - HOST=$DOCKER_HOST
     build:
       context: ./blockchain-nodejs-wallet/
