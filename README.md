@@ -9,10 +9,12 @@ Root repository includes [*submodule repository*](https://github.com/kobvel/bloc
 * Switch between blockchain nodes
 *(if system is fully decentralized it must not make difference which node you use for the transactions)*
 
-##Quick start
-###1. Decentralized application
+## Quick start
+
+### 1. Decentralized application
 To feel the real taste of the decentralized applications and the power behind it I highly recoomend to follow this part of build and setup applicaiton locally. Because of complexity of deploying multiple in the docker images and network dependencies, I decided to create **Client-Server** build, so you can easily pull it as a docker image.
-####Instruction
+
+#### Instruction
 ```bash
 npm install
 git submodule init
@@ -33,6 +35,7 @@ by running:
 docker-compose up -d
 ```
 You can find more details in the corresponding [docker-compose](https://github.com/kobvel/blockchain-nodejs/blob/master/docker-compose.yml) file.
+
 ####Result
 To check your image statuses:
 ```
@@ -42,4 +45,5 @@ docker-compose -ps
 ![docker-compose ps](https://image.ibb.co/gOfY4G/Screen_Shot_2018_01_24_at_20_38_45.png "docker-compose ps")
 
 Now you can open your wallet image address in the browser and explore the app!
-###2. Client-server build
+
+### 2. Client-server build
