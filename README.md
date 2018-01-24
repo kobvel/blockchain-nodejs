@@ -1,7 +1,7 @@
 # Decentralized blockchain network
 
 [Blockchain](https://en.wikipedia.org/wiki/Blockchain) is a core concept behine all modern decentralized cryptocurrencies. In this repo you can check manually how does it work on the basic level.
-### Blockchain wallet
+### [Blockchain Angular Wallet](https://github.com/kobvel/blockchain-nodejs-wallet)
 Root repository includes [*submodule repository*](https://github.com/kobvel/blockchain-nodejs-wallet "submodule") with the multi-functional wallet which allows:
 
 * Create multiple wallets
