@@ -45,11 +45,12 @@ services:
   wallet:
     container_name: wallet
     environment:
-      - PEERS=http://node1:3001;http://node2:3002;http://node3:3003
+      - PORTS=3001;3002;3003
+      - HOST=$DOCKER_HOST
     build:
       context: ./blockchain-nodejs-wallet/
       dockerfile: Dockerfile
     ports:
-        - "80:80"
-    networks:
-      default:
+        - "4200:4200"
+networks:
+    default:
