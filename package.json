@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
+    "coverage": "istanbul cover _mocha -- -R spec",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@types/sinon-chai": "^2.7.29",
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-plugin-node": "^5.2.1",
     "istanbul": "^1.1.0-alpha.1",
