@@ -1,3 +1,4 @@
+var expect  = require('chai').expect;
 const Transaction = require('../server/transaction');
 const _ = require('underscore');
 
@@ -22,10 +23,10 @@ describe("Transaction", () => {
                 'timestamp'
             ];
 
-            props.forEach(prop => expect(_.has(sut, prop)).toBeTruthy());
-            expect(sut.from).toBe(testData.from);
-            expect(sut.to).toBe(testData.to);
-            expect(sut.amount).toBe(testData.amount);
+            props.forEach(prop => expect(_.has(sut, prop)).to.be.true);
+            expect(sut.from).to.be.equal(testData.from);
+            expect(sut.to).to.be.equal(testData.to);
+            expect(sut.amount).to.be.equal(testData.amount);
         });
     });
 });

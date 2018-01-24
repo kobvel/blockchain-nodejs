@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "istanbul cover jasmine-node test",
-    "jasmine": "./node_modules/jasmine-node/bin/jasmine-node"
+    "test": "mocha",
+    "coverage": "istanbul cover _mocha -- -R spec"
   },
   "repository": {
     "type": "git",
@@ -24,11 +24,14 @@
   },
   "homepage": "https://github.com/kobvel/blockchain-nodejs#readme",
   "devDependencies": {
-    "@types/jasmine-node": "^1.14.32",
+    "@types/sinon-chai": "^2.7.29",
+    "chai": "^4.1.2",
     "eslint": "^4.16.0",
     "eslint-plugin-node": "^5.2.1",
     "istanbul": "^1.1.0-alpha.1",
-    "jasmine-node": "^1.14.5",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.1",
+    "sinon-chai": "^2.14.0",
     "validator": "^9.2.0"
   },
   "dependencies": {

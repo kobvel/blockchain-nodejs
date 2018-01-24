@@ -58,6 +58,7 @@ class BlockChain {
         const lastProof = lastBlock.data['pow'];
 
         let nodeTransactions = [...lastBlock.data.transactions];
+
         if (tx instanceof Transaction) {
             nodeTransactions.push(tx);
         }

@@ -1,3 +1,7 @@
+const expect = require('chai').expect;
+const sinon = require('sinon');
+require('chai').use(require('sinon-chai'));
+
 const Blockchain = require('../server/blockchain');
 const validator = require('validator');
 
@@ -18,18 +22,18 @@ describe("Blockchain", () => {
             transactions: []
         });
 
-        expect(sut.index).toBe(initialIndex);
-        expect(new Date(sut.timestamp) instanceof Date).toBeTruthy();
-        expect(sut.timestamp).toBeCloseTo(Date.now(), -1);
-        expect(JSON.stringify(sut.data)).toBe(initialData);
-        expect(validator.isHash(sut.hash, 'sha256')).toBeTruthy();
+        expect(sut.index).to.be.equal(initialIndex);
+        expect(new Date(sut.timestamp) instanceof Date).to.be.true;
+        expect(sut.timestamp).to.be.closeTo(Date.now(), 5);
+        expect(JSON.stringify(sut.data)).to.be.equal(initialData);
+        expect(validator.isHash(sut.hash, 'sha256')).to.be.true;
     });
 
     it('should create a chain with the genesis block', () => {
         const sut = blockchain;
 
-        expect(sut.chain).toBeDefined();
-        expect(sut.chain.length).toBe(1);
+        expect(sut.chain).to.not.be.undefined;
+        expect(sut.chain.length).to.be.equal(1);
     })
 
     it("it should generate correct Next block", () => {
@@ -48,10 +52,10 @@ describe("Blockchain", () => {
 
         const sutResult = sut(lastBlock);
 
-        expect(sutResult.index).toBe(expectedIndex);
-        expect(sutResult.timestamp).toBeCloseTo(Date.now(), -1);
-        expect(sutResult.data).toBe(expectedData);
-        expect(validator.isHash(sutResult.hash, 'sha256')).toBeTruthy();
+        expect(sutResult.index).to.be.equal(expectedIndex);
+        expect(sutResult.timestamp).to.be.closeTo(Date.now(), 1);
+        expect(sutResult.data).to.be.equal(expectedData);
+        expect(validator.isHash(sutResult.hash, 'sha256')).to.be.true;
     });
 
     it('should add block to chain', () => {
@@ -65,14 +69,59 @@ describe("Blockchain", () => {
         blockchain.addBlock(newBlock);
         const sut = blockchain.chain;
 
-        expect(sut.length).toBe(2);
-        expect(sut[sut.length - 1]).toBe(newBlock);
+        expect(sut.length).to.be.equal(2);
+        expect(sut[sut.length - 1]).to.be.equal(newBlock);
     });
 
     it('should count proof of work', () => {
         const sut = blockchain.proofOfWork;
         const result = sut(9);
 
-        expect(result).toBe(18);
+        expect(result).to.be.equal(18);
     });
+
+    describe('sendCoins', () => {
+        const testData = {
+            from: 'Mike',
+            to: 'Lora',
+            amount: 12
+        }
+
+        it('should increase transactions length by two', async() => {
+            const lastBlock = blockchain.chain[blockchain.chain.length - 1];
+            const txLengthBefore = lastBlock.data.transactions.length
+
+            await blockchain.sendCoins(testData);
+
+            const newBlock = blockchain.chain[blockchain.chain.length - 1];
+            const txLengthAfter = newBlock.data.transactions.length;
+
+            expect(txLengthBefore).to.be.equal(txLengthAfter - 2);
+        });
+
+        it('should return correct transaction', async() => {
+            const sut = await blockchain.sendCoins(testData);
+
+            expect(sut.timestamp).to.be.closeTo(Date.now(), 1);
+            expect(sut.from).to.be.equal(testData.from);
+            expect(sut.to).to.be.equal(testData.to);
+            expect(sut.amount).to.be.equal(testData.amount);
+        });
+    })
+
+    describe('getTransactions', () => {
+        it('consensus should be called', () => {
+            sinon.spy(blockchain, 'consensus')
+
+            blockchain.getTransactions();
+            expect(blockchain.consensus).calledOnce;
+        })
+        it('should return transactions on getTransactions call', async() => {
+            const transactions = blockchain.chain[blockchain.chain.length - 1].data.transactions;
+            const sut = await blockchain.getTransactions();
+
+            expect(sut).to.be.equal(transactions);
+        })
+    })
+
 });
