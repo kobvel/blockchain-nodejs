@@ -137,14 +137,13 @@ class BlockChain {
     async consensus() {
         // Get the blocks from other nodes
         const otherChains = await this.findNewChains();
-        console.log(`Found other ${Object.keys(otherChains).length} chains`);
         // If our chain isn't longest, then we store the longest chain
         let longest_chain = this.chain;
 
-        for (let peer in otherChains) {
-            if (longest_chain.length < otherChains[peer].length) {
-                console.log(`Replacing with the other node: ${peer}`);
-                this.chain = otherChains[peer];
+        for (let i in otherChains) {
+            if (longest_chain.length < otherChains[i].length) {
+                console.log(`Replacing with the other node: ${i}`);
+                this.chain = otherChains[i];
             }
         }
     }

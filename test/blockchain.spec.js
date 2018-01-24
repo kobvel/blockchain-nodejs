@@ -124,4 +124,62 @@ describe("Blockchain", () => {
         })
     })
 
+    describe('getBalance', () => {
+        const testAddress = 'some hash';
+
+
+        it('should check consensus', async() => {
+            sinon.spy(blockchain, 'consensus');
+            await blockchain.getBalance(testAddress);
+
+            expect(blockchain.consensus).calledOnce;
+        })
+
+        it('should return correct balance', async() => {
+            const transactions = [{
+                to: testAddress,
+                from: 'x',
+                amount: 99
+            }, {
+                to: 'y',
+                from: testAddress,
+                amount: 22
+            }, {
+                to: testAddress,
+                from: 'z',
+                amount: 23
+            }];
+
+            blockchain.chain[blockchain.chain.length - 1] = {
+                data: {
+                    transactions
+                }
+            };
+
+            const sut = await blockchain.getBalance(testAddress);
+
+            expect(sut).to.be.equal(100);
+        })
+
+    })
+
+    describe('consensus', () => {
+        it('should ', async() => {
+            const longestChainLength = 10
+            const chain1 = new Array(5);
+            const chain2 = new Array(longestChainLength);
+            console.log(chain1.length, chain2.length);
+
+            const mock = sinon.mock(blockchain)
+            mock.expects("findNewChains").returns([chain1, chain2]);
+
+            await blockchain.consensus();
+
+            expect(blockchain.chain.length).to.be.equal(longestChainLength);
+
+            mock.verify();
+            mock.restore();
+        })
+    })
+
 });

@@ -66,8 +66,15 @@ app.post('/transfer', async(req, res) => {
     if (!validator.isHash(req.body.from, 'sha256') && !validator.isHash(req.body.to, 'sha256')) {
         res.sendStatus(400);
     }
+
     if (req.body.to === req.body.from) {
         res.status(400).send('Sender and Address can\'t have the same hash!');
+    }
+
+    const balance = await blockchain.getBalance(req.body.from);
+
+    if (balance < req.body.amount) {
+        res.status(406).send('Out of balance!');
     }
 
     const transaction = await blockchain.sendCoins(req.body);
