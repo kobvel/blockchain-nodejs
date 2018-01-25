@@ -8,7 +8,7 @@
     "start": "node index.js",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",

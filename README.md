@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/kobvel/blockchain-nodejs.svg?branch=master)](https://travis-ci.org/kobvel/blockchain-nodejs)
 [![Coverage Status](https://coveralls.io/repos/github/kobvel/blockchain-nodejs/badge.svg?branch=master)](https://coveralls.io/github/kobvel/blockchain-nodejs?branch=master)
 # Decentralized blockchain network
 
