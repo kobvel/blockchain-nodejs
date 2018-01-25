@@ -164,13 +164,32 @@ describe("Blockchain", () => {
     })
 
     describe('consensus', () => {
-        it('should ', async() => {
+        it('should replace chain with the longest one', async() => {
             const longestChainLength = 10
             const chain1 = new Array(5);
             const chain2 = new Array(longestChainLength);
             console.log(chain1.length, chain2.length);
 
             const mock = sinon.mock(blockchain)
+            mock.expects("findNewChains").returns([chain1, chain2]);
+
+            await blockchain.consensus();
+
+            expect(blockchain.chain.length).to.be.equal(longestChainLength);
+
+            mock.verify();
+            mock.restore();
+        })
+
+        it('should keep default if no longest', async() => {
+            const longestChainLength = 20;
+
+            blockchain.chain = new Array(longestChainLength);
+
+            const chain1 = new Array(5);
+            const chain2 = new Array(7);
+            const mock = sinon.mock(blockchain);
+
             mock.expects("findNewChains").returns([chain1, chain2]);
 
             await blockchain.consensus();
